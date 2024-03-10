@@ -7,6 +7,7 @@
 \usepackage[left=2cm, top=3cm, text={17cm, 24cm}]{geometry}
 \usepackage{times}
 \usepackage{verbatim}
+\setlength{\parskip}{1em}
 \usepackage{enumitem}
 \usepackage{amsmath, bm}
 \usepackage[graphicx]{realboxes}
@@ -24,11 +25,13 @@
 
 			\vspace{\stretch{0.382}}
 
-			\LARGE{Projekt 1. část} \\
+            \Large{IDS \--\ Databázové systémy} \\
+            \LARGE{2023/2024} \\[0.4em]
+
+			\LARGE{Dokumentace 1. části projektu} \\
 			\Huge{\textbf{Model případů užití, ER diagram}} \\
             \bigskip
             \Large{\textbf{Kavárenský povaleč}} \\
-            \Large{IDS \--\ Databázové systémy} \\
             
 			\vspace{\stretch{0.6}}
 		\end{center}
@@ -78,4 +81,12 @@ kterými byly ohodnoceny.
 			\includegraphics[width=1\linewidth]{./IDS_ER.png} \\
             \label{ER}
 \end{center}
+
+\subsection{Popis ERD}
+Systém rozlišuje mezi dvěma typama uživatelů a to mezi prostým návštěvníkem a zaměstnancem kavárny. O~každém uživateli se uchovávají základní informace jako jméno, datum narození či e-mail. Zaměstananci mají taktéž zvolenou svou pozici a mohou pracovat v~1 až N kavárnách. Návštěnvíci si navíc zvolí svůj oblíbený druh přípravy kávy, oblíbenou kávu a průměrný počet vypitých káv denně. Zvolí si taktéž svou oblíbenou kavárnu a~mohou hodnotit kavárny recenzemi.
+
+\noindent Kavárny uchovávají základní informace jako jsou název, lokalita či otevírací doba. Zobrazují taktéž aktuální nabídku káv, kterých může být 0 až N (0 káv je taktéž přípustné). Ke každé kavárně se rovněž vztahuje 0 až N recenzí, které uživatelé napsali.
+
+\noindent Recenze mají své unikátní číslo a základní informace jako text recenze, počet hvězdiček daných uživatelem a další. Každá recenze se vztahuje právě k~jedné kavárně, na jednu recenzi se může vztahovat 0 až N reakcí. Jelikož reakce nemůže existovat samostatně, je implementována jako slabá entitní množina. Reakce se vztahuje právě k~jedné recenzi, píše ji právě jeden zaměstnanec a uživatelé je rovněž jako recenze mohou hodnotit palcama nahoru či dolů.
+
 \end{document}
