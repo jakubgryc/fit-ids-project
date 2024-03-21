@@ -3,10 +3,11 @@
 
 -- Smazani tabulek
 
--- drop table Zamestnanec;
--- drop table Uzivatel;
+
 -- drop table Reakce;
+-- drop table Zamestnanec;
 -- drop table Recenze;
+-- drop table Uzivatel;
 -- drop table Kava;
 -- drop table Kavarna;
 -- drop table Osoba;
@@ -35,23 +36,23 @@ create table Uzivatel(
 );
 
 create table Kavarna(
-                        ID_kavarny int primary key not null,
-                        Nazev nvarchar2(255) not null,
-                        Mesto nvarchar2(255) not null,
-                        PSC nvarchar2(255) not null,
-                        Ulice nvarchar2(255) not null,
-                        Cislo_popisne  nvarchar2(255) not null,
-                        Kapacita int not null check (Kapacita > 0),
-                        Popis nvarchar2(1023) not null,
-                        Cas_otevreni nvarchar2(5) not null,
-                        Cas_zavreni nvarchar2(5) not null
+    ID_kavarny int primary key not null,
+    Nazev nvarchar2(255) not null,
+    Mesto nvarchar2(255) not null,
+    PSC nvarchar2(255) not null,
+    Ulice nvarchar2(255) not null,
+    Cislo_popisne  nvarchar2(255) not null,
+    Kapacita int not null check (Kapacita > 0),
+    Popis nvarchar2(1023) not null,
+    Cas_otevreni nvarchar2(5) not null,
+    Cas_zavreni nvarchar2(5) not null
 );
 
 create table Kava(
-                     Nazev nvarchar2(255) primary key not null,
-                     Oblast_puvodu nvarchar2(255) not null,
-                     Popis_chuti nvarchar2(255) not null,
-                     Zpusob_pripravy nvarchar2(255) not null
+    Nazev nvarchar2(255) primary key not null,
+    Oblast_puvodu nvarchar2(255) not null,
+    Popis_chuti nvarchar2(255) not null,
+    Zpusob_pripravy nvarchar2(255) not null
 );
 
 create table Recenze(
@@ -77,5 +78,3 @@ create table Reakce(
     Palce_nahoru int not null check (Palce_nahoru >= 0),
     Palce_dolu int not null check (Palce_dolu >= 0)
 );
-
-
