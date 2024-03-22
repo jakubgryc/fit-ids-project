@@ -3,78 +3,71 @@
 
 -- Smazani tabulek
 
-
--- drop table Reakce;
--- drop table Zamestnanec;
--- drop table Recenze;
--- drop table Uzivatel;
--- drop table Kava;
--- drop table Kavarna;
--- drop table Osoba;
+drop table zamestnanec;
+drop table uzivatel;
+drop table osoba;
+drop table reakce;
+drop table recenze;
+drop table kava;
+drop table kavarna;
 
 -- Vytvoreni tabulek
 
-create table Osoba(
-    ID_uzivatele int primary key,
-    Jmeno nvarchar2(255) not null,
-    Prijmeni nvarchar2(255) not null,
-    Datum_narozeni date not null,
-    Telefon nvarchar2(14) not null check ( regexp_like(Telefon, '^(\+[0-9]{12})|([0-9]{9})$')),
-    Email nvarchar2(255) not null check ( regexp_like(Email, '^[a-z0-9.-_]+@[a-z0-9.-_]+]\.[a-z]+]$'))
+create table osoba(
+    id_uzivatele int primary key,
+    jmeno nvarchar2(255) not null,
+    prijmeni nvarchar2(255) not null,
+    datum_narozeni date not null,
+    telefon nvarchar2(14) not null check ( regexp_like(telefon, '^(\+[0-9]{12})|([0-9]{9})$')),
+    email nvarchar2(255) not null check ( regexp_like(email, '^[a-z0-9.-_]+@[a-z0-9.-_]+]\.[a-z]+]$'))
 );
 
-create table Zamestnanec(
-    ID_uzivatele int primary key references Osoba(ID_uzivatele) on delete cascade,
-    Pozice nvarchar2(255) not null check ( Pozice in ('Majitel', 'Barista', 'Číšník', 'Kuchař'))
+create table zamestnanec(
+    id_uzivatele int primary key references osoba(id_uzivatele) on delete cascade,
+    pozice nvarchar2(255) not null check ( pozice in ('majitel', 'barista', 'cisnik', 'kuchar'))
 );
 
-create table Uzivatel(
-    ID_uzivatele int primary key references Osoba(ID_uzivatele) on delete cascade,
-    Oblibeny_druh_kavy nvarchar2(255) not null,
-    Oblibeny_druh_pripravy nvarchar2(255) not null,
-    Kav_denne int not null check (Kav_denne >= 0)
+create table uzivatel(
+    id_uzivatele int primary key references osoba(id_uzivatele) on delete cascade,
+    oblibeny_druh_kavy nvarchar2(255) not null,
+    oblibeny_druh_pripravy nvarchar2(255) not null,
+    kav_denne int not null check (kav_denne >= 0)
 );
 
-create table Kavarna(
-    ID_kavarny int primary key not null,
-    Nazev nvarchar2(255) not null,
-    Mesto nvarchar2(255) not null,
-    PSC nvarchar2(255) not null,
-    Ulice nvarchar2(255) not null,
-    Cislo_popisne  nvarchar2(255) not null,
-    Kapacita int not null check (Kapacita > 0),
-    Popis nvarchar2(1023) not null,
-    Cas_otevreni nvarchar2(5) not null,
-    Cas_zavreni nvarchar2(5) not null
+create table recenze(
+    id_recenze int primary key not null,
+    datum_vytvoreni date not null,
+    pocet_hvezdicek int check ((pocet_hvezdicek <= 5) and (pocet_hvezdicek >= 1)),
+    text_recenze nvarchar2(1023) not null,
+    palce_nahoru int not null check (palce_nahoru >= 0),
+    palce_dolu int not null check (palce_dolu >= 0)
 );
 
-create table Kava(
-    Nazev nvarchar2(255) primary key not null,
-    Oblast_puvodu nvarchar2(255) not null,
-    Popis_chuti nvarchar2(255) not null,
-    Zpusob_pripravy nvarchar2(255) not null
+create table reakce(
+    id_reakce int primary key,
+    id_recenze int,
+    foreign key (id_recenze) references recenze(id_recenze),
+    text_reakce nvarchar2(1023) not null,
+    palce_nahoru int not null check (palce_nahoru >= 0),
+    palce_dolu int not null check (palce_dolu >= 0)
 );
 
-create table Recenze(
-    ID_recenze int primary key not null,
-    ID_kavarny int,
-    ID_uzivatele int,
-    foreign key (ID_uzivatele) references Uzivatel(ID_uzivatele),
-    foreign key (ID_kavarny) references Kavarna(ID_kavarny),
-    Datum_vytvoreni date not null,
-    Pocet_hvezdicek int check ((Pocet_hvezdicek <= 5) and (Pocet_hvezdicek >= 1)),
-    Text_recenze nvarchar2(1023) not null,
-    Palce_nahoru int not null check (Palce_nahoru >= 0),
-    Palce_dolu int not null check (Palce_dolu >= 0)
+create table kava(
+    nazev nvarchar2(255) primary key not null,
+    oblast_puvodu nvarchar2(255) not null,
+    popis_chuti nvarchar2(255) not null,
+    zpusob_pripravy nvarchar2(255) not null
 );
 
-create table Reakce(
-    ID_reakce int primary key,
-    ID_recenze int,
-    ID_uzivatele int,
-    foreign key (ID_uzivatele) references Zamestnanec(ID_uzivatele),
-    foreign key (ID_recenze) references Recenze(ID_recenze),
-    Text_reakce nvarchar2(1023) not null,
-    Palce_nahoru int not null check (Palce_nahoru >= 0),
-    Palce_dolu int not null check (Palce_dolu >= 0)
+create table kavarna(
+    id_kavarny int primary key not null,
+    nazev nvarchar2(255) not null,
+    mesto nvarchar2(255) not null,
+    psc nvarchar2(255) not null,
+    ulice nvarchar2(255) not null,
+    cislo_popisne  nvarchar2(255) not null,
+    kapacita int not null check (kapacita > 0),
+    popis nvarchar2(1023) not null,
+    cas_otevreni nvarchar2(5) not null,
+    cas_zavreni nvarchar2(5) not null
 );
