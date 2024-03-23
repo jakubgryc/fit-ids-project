@@ -57,8 +57,6 @@ create table recenze(
     datum_vytvoreni date not null,
     pocet_hvezdicek int check ((pocet_hvezdicek <= 5) and (pocet_hvezdicek >= 1)),
     text_recenze nvarchar2(1023) not null,
-    palce_nahoru int not null check (palce_nahoru >= 0),
-    palce_dolu int not null check (palce_dolu >= 0),
     id_uzivatele int not null references uzivatel(id_osoby), -- vztah uzivatel napsal recenzi
     id_kavarny int not null references kavarna(id_kavarny) -- kavarna, na kterou je recenze napsana
 );
@@ -66,8 +64,6 @@ create table recenze(
 create table reakce(
     id_reakce int generated as identity primary key,
     text_reakce nvarchar2(1023) not null,
-    palce_nahoru int not null check (palce_nahoru >= 0),
-    palce_dolu int not null check (palce_dolu >= 0),
     id_zamestnance int not null references zamestnanec(id_osoby), -- vztah zamestnanec napsal reakci
     id_recenze int not null references recenze(id_recenze) -- recenze, na kterou reakce odpovida
 );
@@ -84,12 +80,14 @@ create table kava(
 create table uzivatel_ohodnotil_recenzi(
     id_uzivatele int not null references uzivatel(id_osoby),
     id_recenze int not null references recenze(id_recenze),
+    hodnoceni int not null check (hodnoceni in (1, -1)), -- 1 -> palec nahoru, -1 -> palec dolu
     primary key(id_uzivatele, id_recenze)
 );
 
 create table uzivatel_ohodnotil_reakci(
     id_uzivatele int not null references uzivatel(id_osoby),
     id_reakce int not null references reakce(id_reakce),
+    hodnoceni int not null check (hodnoceni in (1, -1)), -- 1 -> palec nahoru, -1 -> palec dolu
     primary key(id_uzivatele, id_reakce)
 );
 
@@ -140,11 +138,13 @@ values (2, 'barista');
 insert into zamestnanec_pracuje_v_kavarne(id_kavarny, id_zamestnance)
 values (1, 2);
 
-insert into recenze(datum_vytvoreni, pocet_hvezdicek, text_recenze, palce_nahoru, palce_dolu, id_uzivatele, id_kavarny)
-values (to_date('01.03.2024', 'dd.mm.yyyy'), 5, 'Super kavarna na klidnem miste, mila obsluha. Urcite se tu jeste zastavim.', 0, 0, 1, 1);
+insert into recenze(datum_vytvoreni, pocet_hvezdicek, text_recenze, id_uzivatele, id_kavarny)
+values (to_date('01.03.2024', 'dd.mm.yyyy'), 5, 'Super kavarna na klidnem miste, mila obsluha. Urcite se tu jeste zastavim.', 1, 1);
 
-insert into reakce(text_reakce, palce_nahoru, palce_dolu, id_zamestnance, id_recenze)
-values ('To nas tesi, dekujeme za zpetnou vazbu!', 1, 0, 2, 1);
+insert into reakce(text_reakce, id_zamestnance, id_recenze)
+values ('To nas tesi, dekujeme za zpetnou vazbu!', 2, 1);
 
-insert into uzivatel_ohodnotil_reakci(id_uzivatele, id_reakce)
-values (1, 1);
+insert into uzivatel_ohodnotil_reakci(id_uzivatele, id_reakce, hodnoceni)
+values (1, 1, 1);
+
+commit;
